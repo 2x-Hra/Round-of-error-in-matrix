@@ -1,17 +1,17 @@
-def sample_input():
+def sample_input(row):
     
     # while(input() != "o"):
 
-    row =int(input())
+    row =int(row)
     # counter = 0
 
     A_input = input().split()
     A_input =[int(i) for i in A_input]
-    print(A_input)
+    # print(A_input)
     
     H_input = input().split()
     H_input =[int(i) for i in H_input]
-    print(H_input)
+    # print(H_input)
 
     b_input = input().split()
     b_input =[int(i) for i in b_input]
@@ -21,23 +21,37 @@ def sample_input():
 
 
 
-def martix_maker(row_number, elements):
+def martix_maker(row,coloumn, elements):
     counter1=0
     counter2=0
     arr_out =[]
     arr_temp =[]
     i=0 
-    while(counter1 < row_number):
+    while(counter1 < row):
         counter2 = 0
         arr_temp = []
-        while( counter2 < row_number):
+        while( counter2 < coloumn):
             arr_temp.append(elements[i])
             i += 1
             counter2 += 1
 
         arr_out.append(arr_temp)
         counter1 += 1
-    print(arr_out)
-A_vars , H_vars, b_vars , row = sample_input()
+    
+    return arr_out
 
-martix_maker(row,A_vars)
+row = input()
+all_matrix = []
+while(row != "o" ):
+    A_vars , H_vars, b_vars , row = sample_input(row)
+
+    A_matrix = martix_maker(row,row,A_vars)
+    H_matrix = martix_maker(row,row,H_vars)
+    b_matrix = martix_maker(row,1,b_vars)
+
+    all_matrix.append((A_matrix, H_matrix, b_matrix))
+    row = input()
+
+
+
+print(all_matrix)
