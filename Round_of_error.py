@@ -1,5 +1,7 @@
 def sample_input(row):
+    '''
 
+    '''
     row =int(row)
 
     A_input = input().split()
@@ -48,5 +50,8 @@ def samples():
         row = input()
     return all_matrix
 
+
+def determinant(row, elements):
+    
 
 print(samples())
