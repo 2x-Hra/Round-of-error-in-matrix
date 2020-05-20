@@ -120,9 +120,10 @@ def detrmnt_NXN (matrix):
     
 
 
-def minorsMatrix(matrix):
+def minors(matrix):
     '''
         baraye tak tak elemnt ha satro sotoon ro migire 
+        va determinane matrixe moonde ro hesab mikone
     '''
     matrix_length = len(matrix)
     minors = []
@@ -136,7 +137,11 @@ def minorsMatrix(matrix):
         minors.append(row)
     return minors
 
-def cofactorsMatrix(matrix):
+def co_factor_m(matrix):
+    '''
+        elemnt haye too matrix baraye Invers kardan
+        manfi mikone 
+    '''
     n = len(matrix)
     my_matrix = zeroMatrix(n,n)
     for i in range(n):
@@ -147,7 +152,7 @@ def cofactorsMatrix(matrix):
                 my_matrix[i][j] = matrix[i][j]
     return my_matrix
 
-def adjugateMatrix(matrix):
+def adjugate_m(matrix):
     '''
         inja nesbat be ghotre asli makoos mishan
     '''
@@ -172,7 +177,10 @@ def adjugateMatrix(matrix):
         counter+=1
     return my_matrix
 
-def multiplyByDetInv(matrix, original_matrix):
+def divideByDetrmint(matrix, original_matrix):
+    '''
+         inja ma baraye hesab kardane Invers miaim oon 1/det ro hesab miknim
+    '''
     n = len(matrix)
     my_matrix = zeroMatrix(n,n)
     det = detrmnt_NXN(original_matrix)
@@ -182,48 +190,65 @@ def multiplyByDetInv(matrix, original_matrix):
     return my_matrix
             
 def matrixInverse(matrix):
-    minor_matrix = minorsMatrix(matrix)
-    cofactor_matrix = cofactorsMatrix(minor_matrix)
-    adjugate_matrix = adjugateMatrix(cofactor_matrix)
-    inverse_matrix = multiplyByDetInv(adjugate_matrix, matrix)
+    '''
+        oon 4 ta stepi ke baraye Invers niaz hast inja emal shode
+
+    '''
+    minor_matrix = minors(matrix)
+    cofactor_matrix = co_factor_m(minor_matrix)
+    adjugate_matrix = adjugate_m(cofactor_matrix)
+    inverse_matrix = divideByDetrmint(adjugate_matrix, matrix)
     return inverse_matrix 
 
 
 
 def matrixMultiply(a, b):
+
+    '''
+         zarbe 2 ta matrix, row * column
+    '''
     ans = []
-    a_rows_number = len(a)
-    a_columns_number = len(a[0])
-    b_columns_number = len(b[0])
-    for i in range(a_rows_number):
+    a_rows_num = len(a)
+    a_columns_num = len(a[0])
+    b_columns_num = len(b[0])
+    for i in range(a_rows_num):
         row_mult = []
-        for k in range(b_columns_number):
+        for k in range(b_columns_num):
             sum = 0
-            for j in range(a_columns_number):
+            for j in range(a_columns_num):
                 sum+=a[i][j]*b[j][k]
             row_mult.append(sum)
         ans.append(row_mult)
     return ans
 
-def solveXx(a_h, b):
-    a_h_inverse = matrixInverse(a_h)
-    return matrixMultiply(a_h_inverse, b)
+def solver(matrix, b):
+    '''
+        inja baraye halle moadele Ax = b , Hx = b
+    '''
+    matrix = matrixInverse(matrix)
+    return matrixMultiply(matrix, b)
 
 
-def residualVector(b, a_h, x):
-    a_h_mult_x = matrixMultiply(a_h,x)
+def residualVector(b, matrix, x):
+    '''
+    mohasebeye residual
+    '''
+    matrix_Mult_x = matrixMultiply(matrix,x)
     minus = []
     n = len(b)
     for i in range (n):
         row = []
-        row.append(b[i][0]- a_h_mult_x[i][0])
+        row.append(b[i][0]- matrix_Mult_x[i][0])
         minus.append(row)
     
     return minus
 
-    # return matrixMinus(b, a_h_mult_x)
+
 
 def residualVectorNorm(vector):
+    '''
+        mohasebeye Norm
+    '''
     sum = 0
     n = len(vector)
     for i in range(n):
@@ -252,16 +277,16 @@ for sample in samples_arr:
 
 
         '''here is Step Four :'''
-        x1 = solveXx(A, b)
-        x2 = solveXx(H, b)
+        x1 = solver(A, b)
+        x2 = solver(H, b)
 
         '''here is Step Five :'''
-        v1 = residualVector(b, A, x1)
-        v2 = residualVector(b, H, x2)
+        vec1 = residualVector(b, A, x1)
+        vec2 = residualVector(b, H, x2)
 
         '''here is Step Six :'''
-        n1 = residualVectorNorm(v1)
-        n2 = residualVectorNorm(v2)
+        n1 = residualVectorNorm(vec1)
+        n2 = residualVectorNorm(vec2)
         print("||b-Ax||=" + str(n1))
         print("||b-Hx||=" + str(n2))
 
