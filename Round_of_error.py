@@ -1,4 +1,6 @@
-
+''' 
+    sorry but comments are in persian language
+    '''
 import math
 
 def sample_input(row):
